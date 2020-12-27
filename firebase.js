@@ -1,6 +1,10 @@
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-var firebaseConfig = {
+
+// restrict api access: https://console.developers.google.com/apis/credentials/
+// https://stackoverflow.com/questions/61706753/unable-to-add-chrome-extension-url-to-firebase-whitelisted-domains
+// https://medium.com/@devesu/how-to-secure-your-firebase-project-even-when-your-api-key-is-publicly-available-a462a2a58843
+const firebaseConfig = {
   apiKey: 'AIzaSyAXUJuaD2h0pvjyEz6JOijYpMq2WJaAb68',
   authDomain: 'brave-notes.firebaseapp.com',
   projectId: 'brave-notes',
@@ -9,17 +13,18 @@ var firebaseConfig = {
   appId: '1:580783597062:web:2c9abf3d4f778ef8260587',
   measurementId: 'G-G2LSJJRDFL',
 };
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 // firebase.analytics();
 
 chrome.runtime.onMessage.addListener((msg, sender, response) => {
-  if (msg.command == 'fetchNotes') {
+  if (msg.command === 'fetchNotes') {
     firebase
       .database()
       .ref('/notes')
       .once('value')
-      .then(function (snapshot) {
+      .then((snapshot) => {
         response({
           type: 'result',
           status: 'success',
@@ -30,11 +35,11 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
   }
 
   if (msg.command == 'deleteNote') {
-    var noteId = msg.data.id;
-    //console.log(noteId)
+    const noteId = msg.data.id;
+    // console.log(noteId)
     if (noteId != '') {
       try {
-        var deleteNote = firebase
+        const deleteNote = firebase
           .database()
           .ref('/notes/' + noteId)
           .remove();
@@ -46,21 +51,26 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
         });
       } catch (e) {
         console.log('error', e);
-        response({ type: 'result', status: 'error', data: e, request: msg });
+        response({
+          type: 'result',
+          status: 'error',
+          data: e,
+          request: msg,
+        });
       }
     }
   }
 
   if (msg.command == 'postNote') {
-    var title = msg.data.title;
-    var body = msg.data.body;
-    var icon = msg.data.icon;
-    var noteId = msg.data.id;
+    const title = msg.data.title;
+    const body = msg.data.body;
+    const icon = msg.data.icon;
+    const noteId = msg.data.id;
 
     try {
       if (noteId != 'EMPTY-AUTOGEN--') {
         // MADE THIS UP IN app.js
-        var newNote = firebase
+        const newNote = firebase
           .database()
           .ref('/notes/' + noteId)
           .update({
@@ -75,8 +85,8 @@ chrome.runtime.onMessage.addListener((msg, sender, response) => {
           request: msg,
         });
       } else {
-        var newPostKey = firebase.database().ref().child('notes').push().key;
-        var newNote = firebase
+        const newPostKey = firebase.database().ref().child('notes').push().key;
+        const newNote = firebase
           .database()
           .ref('/notes/' + newPostKey)
           .set({
