@@ -1,1 +1,3 @@
-# brave_notes!
+# brave_notes!  Plugin for Taking Notes
+
+
