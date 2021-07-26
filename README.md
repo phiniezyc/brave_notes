@@ -1,3 +1,3 @@
-# brave_notes... Brave Taking App
+# brave_notes... brave taking app
 
 
