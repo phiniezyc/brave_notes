@@ -2,6 +2,6 @@
 
 Taking Notes Should Not Require Losing Your Inspiration.
 
-It is what it is.........
+It is what it is.
 
 
